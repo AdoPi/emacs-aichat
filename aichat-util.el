@@ -304,7 +304,7 @@ Returns stdout on success, otherwise returns nil."
 
 (async-defun aichat-get-cookies-from-shell (domain browser-name)
   "Get cookies from shell command with rookiepy."
-  (if (not (t) ))
+  (if nil
       (message "Please install rookiepy by `pip3 install rookiepy`")
     (when-let ((stdout (await
                         (aichat-shell-command
