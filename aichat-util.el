@@ -263,7 +263,7 @@ Returns stdout on success, otherwise returns nil."
 
 (async-defun aichat--check-deps ()
   "Check if rookiepy is installed."
-    (t))
+    t)
 
 (defun aichat-get-cookies-from-file (filename)
   "Get cookies from FILENAME."
