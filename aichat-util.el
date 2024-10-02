@@ -263,7 +263,8 @@ Returns stdout on success, otherwise returns nil."
 
 (async-defun aichat--check-deps ()
   "Check if rookiepy is installed."
-    t)
+  (when-let ((installed (await (aichat-shell-command "python -c \"import rookiepy\""))))
+    t))
 
 (defun aichat-get-cookies-from-file (filename)
   "Get cookies from FILENAME."
@@ -290,7 +291,7 @@ Returns stdout on success, otherwise returns nil."
 ;  "Make shell command with `domain' and `browser-name'."
 ;  (format "python -c \"import rookiepy;list(map(lambda c: print('{} {} {} {} {} {}'.format(c['name'], c['value'], c['expires'], c['domain'], c['path'], c['secure'])), filter(lambda c: c['domain'] in ('%s'), rookiepy.%s(['%s']))))\""
 ;          domain
-;          browser-name
+;;          browser-name
 ;          domain))
 
 (defun aichat--make-get-cookies-command (domain browser-name)
@@ -300,11 +301,14 @@ Returns stdout on success, otherwise returns nil."
           browser-name
           domain))
 
+
 (async-defun aichat-get-cookies-from-shell (domain browser-name)
   "Get cookies from shell command with rookiepy."
-  ((stdout (await
+  (if (not (t) ))
+      (message "Please install rookiepy by `pip3 install rookiepy`")
+    (when-let ((stdout (await
                         (aichat-shell-command
-                         (aichat--make-get-cookies-command domain browser-name))))
+                         (aichat--make-get-cookies-command domain browser-name)))))
       (mapcar (lambda (line)
                 (let* ((fields (split-string line " " t))
                        (name (nth 0 fields))
@@ -318,7 +322,7 @@ Returns stdout on success, otherwise returns nil."
                                    t
                                  nil)))
                   (list name value expires domain localpart secure)))
-              (split-string stdout "\n" t))))
+              (split-string stdout "\n" t)))))
 
 (async-defun aichat-get-cookies (domain &optional cookie-file)
   "If `cookie-file' is non-nil, get cookies from `cookie-file', otherwise get cookies from shell."
@@ -1475,3 +1479,4 @@ DATA          (string)   data to be sent to the server
 (provide 'aichat-util)
 
 ;;; aichat-util.el ends here
+
