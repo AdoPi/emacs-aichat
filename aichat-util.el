@@ -302,9 +302,9 @@ Returns stdout on success, otherwise returns nil."
 
 (async-defun aichat-get-cookies-from-shell (domain browser-name)
   "Get cookies from shell command with rookiepy."
-  (((stdout (await
+  ((stdout (await
                         (aichat-shell-command
-                         (aichat--make-get-cookies-command domain browser-name)))))
+                         (aichat--make-get-cookies-command domain browser-name))))
       (mapcar (lambda (line)
                 (let* ((fields (split-string line " " t))
                        (name (nth 0 fields))
