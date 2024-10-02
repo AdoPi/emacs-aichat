@@ -302,9 +302,7 @@ Returns stdout on success, otherwise returns nil."
 
 (async-defun aichat-get-cookies-from-shell (domain browser-name)
   "Get cookies from shell command with rookiepy."
-  (if (not (await (aichat--check-deps)))
-      (message "Please install rookiepy by `pip3 install rookiepy`")
-    (when-let ((stdout (await
+  (((stdout (await
                         (aichat-shell-command
                          (aichat--make-get-cookies-command domain browser-name)))))
       (mapcar (lambda (line)
@@ -320,7 +318,7 @@ Returns stdout on success, otherwise returns nil."
                                    t
                                  nil)))
                   (list name value expires domain localpart secure)))
-              (split-string stdout "\n" t)))))
+              (split-string stdout "\n" t))))
 
 (async-defun aichat-get-cookies (domain &optional cookie-file)
   "If `cookie-file' is non-nil, get cookies from `cookie-file', otherwise get cookies from shell."
