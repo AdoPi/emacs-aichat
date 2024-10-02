@@ -263,8 +263,7 @@ Returns stdout on success, otherwise returns nil."
 
 (async-defun aichat--check-deps ()
   "Check if rookiepy is installed."
-  (when-let ((installed (await (aichat-shell-command "python -c \"import rookiepy\""))))
-    t))
+    (t))
 
 (defun aichat-get-cookies-from-file (filename)
   "Get cookies from FILENAME."
@@ -287,9 +286,16 @@ Returns stdout on success, otherwise returns nil."
                 cookies))
     (error "%s not exists" filename)))
 
-(defun aichat--make-get-cookies-command(domain browser-name)
+;(defun aichat--make-get-cookies-command(domain browser-name)
+;  "Make shell command with `domain' and `browser-name'."
+;  (format "python -c \"import rookiepy;list(map(lambda c: print('{} {} {} {} {} {}'.format(c['name'], c['value'], c['expires'], c['domain'], c['path'], c['secure'])), filter(lambda c: c['domain'] in ('%s'), rookiepy.%s(['%s']))))\""
+;          domain
+;          browser-name
+;          domain))
+
+(defun aichat--make-get-cookies-command (domain browser-name)
   "Make shell command with `domain' and `browser-name'."
-  (format "python -c \"import rookiepy;list(map(lambda c: print('{} {} {} {} {} {}'.format(c['name'], c['value'], c['expires'], c['domain'], c['path'], c['secure'])), filter(lambda c: c['domain'] in ('%s'), rookiepy.%s(['%s']))))\""
+    (format "nix-shell -p python3 python3Packages.virtualenv --run \"virtualenv venv && source venv/bin/activate && pip install rookiepy && python -c \\\"import rookiepy; list(map(lambda c: print('{} {} {} {} {} {}'.format(c['name'], c['value'], c['expires'], c['domain'], c['path'], c['secure'])), filter(lambda c: c['domain'] in ('%s'), rookiepy.%s(['%s']))))\\\"\""
           domain
           browser-name
           domain))
